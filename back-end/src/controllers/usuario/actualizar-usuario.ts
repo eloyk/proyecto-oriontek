@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-//import { validarSolicitud, ErrorNoEncontrado, SolicitudIncorrecta } from '@eloyk/comun';
 import { ErrorNoEncontrado } from '../../errores/error-no-encontrado';
 import { SolicitudIncorrecta } from '../../errores/solicitud-incorrecta'
 import { Usuario } from '../../models/usuario';
