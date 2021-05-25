@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 
 interface AtribDireccionCliente {
   direccion: string;
-  clienteId: string;
   usuarioIdAlta?: string;
   emailUsuarioAlta?: string;
   fechaAlta?: Date;
@@ -11,7 +10,6 @@ interface AtribDireccionCliente {
 
 export interface DocumentoDireccionCliente extends mongoose.Document {
   direccion: string;
-  clienteId: string;
   usuarioIdAlta?: string;
   emailUsuarioAlta?: string;
   fechaAlta?: Date;
@@ -28,10 +26,6 @@ const SchemaDireccionCliente = new mongoose.Schema(
       type: String,
       required: true,
       lowercase: true,
-    },
-    clienteId: {
-      type: String,
-      required: true,
     },
     usuarioIdAlta: {
       type: String,

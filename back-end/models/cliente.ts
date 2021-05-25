@@ -7,9 +7,9 @@ interface AtribCliente {
   telefono?: string;
   empresaId: string;
   correoElectronico?: string;
-  tipoDocumento?: string;
-  numeroDocumento?: string;
-  manejadorPrecio?: [DocumentoDireccionCliente];  
+  tipoDocumento: string;
+  numeroDocumento: string;
+  direccionCliente?: [DocumentoDireccionCliente];  
   usuarioIdAlta?: string;
   emailUsuarioAlta?: string;
   fechaAlta?: Date;
@@ -22,9 +22,9 @@ interface DocumentoCliente extends mongoose.Document {
   telefono?: string;
   empresaId: string;
   correoElectronico?: string;
-  tipoDocumento?: string;
-  numeroDocumento?: string;
-  manejadorPrecio?: [DocumentoDireccionCliente];  
+  tipoDocumento: string;
+  numeroDocumento: string;
+  direccionCliente?: [DocumentoDireccionCliente];  
   usuarioIdAlta?: string;
   emailUsuarioAlta?: string;
   fechaAlta?: Date;
@@ -59,14 +59,19 @@ const SchemaCliente = new mongoose.Schema(
     },
     tipoDocumento: {
       type: String,
+      required: true,
+      lowercase: true,
     },
     numeroDocumento: {
       type: String,
+      unique: true,
+      lowercase: true,
+      trim: true
     },
-    manejadorPrecio: [
+    direccionCliente: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'ManejadorPrecio',
+        ref: 'DireccionCliente',
       },
     ],
     usuarioIdAlta: {
