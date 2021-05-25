@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import config from './config/config';
 
 const iniciar = async () => {
-  console.log('Iniciando Bella Bella Boutique');
+  console.log('Iniciando Empresa X');
 
 try{  
   await mongoose.connect(config.DB.URI, {
