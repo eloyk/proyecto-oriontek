@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 interface AtribDireccionCliente {
+  clienteId: string;
   direccion: string;
   usuarioIdAlta?: string;
   emailUsuarioAlta?: string;
@@ -9,6 +10,7 @@ interface AtribDireccionCliente {
 }
 
 export interface DocumentoDireccionCliente extends mongoose.Document {
+  clienteId: string;
   direccion: string;
   usuarioIdAlta?: string;
   emailUsuarioAlta?: string;
@@ -22,6 +24,10 @@ interface ModeloDireccionCliente extends mongoose.Model<DocumentoDireccionClient
 
 const SchemaDireccionCliente = new mongoose.Schema(
   {
+    clienteId: {
+      type: String,
+      required: true,
+    },
     direccion: {
       type: String,
       required: true,

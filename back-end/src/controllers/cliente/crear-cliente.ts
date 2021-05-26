@@ -15,43 +15,57 @@ export const registrarCliente = async (req: Request, res: Response) => {
       direccion
     } = req.body;
     
-    const validarDireccionCliente = await DireccionCliente.findOne({direccion});
+    let cliente = await Cliente.findOne({ correoElectronico, tipoDocumento, numeroDocumento })
+    .populate({
+      path: 'direccionCliente',
+      match: { estado: true },
+    });
 
-    if (validarDireccionCliente) {
-      throw new SolicitudIncorrecta('Esta descripcion esta agregada, favor intentar nuevamente');
-    }
+    if (cliente) {
+      const validarDireccionCliente = await DireccionCliente.findOne({clienteId: cliente!._id, direccion});
 
-    const direccionCliente = DireccionCliente.build({
-      direccion,
-      usuarioIdAlta: req.usuarioActual!.id,
-      emailUsuarioAlta: req.usuarioActual!.email,
-    })
-    await direccionCliente.save();
-    
-    let cliente = await Cliente.findOne({ correoElectronico, tipoDocumento, numeroDocumento }).populate('direccionCliente');
+      if (validarDireccionCliente) {
+        throw new SolicitudIncorrecta('Esta direccion esta agregada para este cliente, favor intentar nuevamente');
+      }
 
-    if (!cliente) {
-      const empresa = await Empresa.findOne({nombreEmpresa: 'Empresa X'});
+      const direccionCliente = DireccionCliente.build({
+        clienteId: cliente!._id,
+        direccion,
+        usuarioIdAlta: req.usuarioActual!.id,
+        emailUsuarioAlta: req.usuarioActual!.email,
+      })
+      await direccionCliente.save();
+
+      if(cliente.estado == false){
+        throw new SolicitudIncorrecta('Este cliente fue dado de baja favor ponerse en contacto con el administrador')
+      }
+      cliente.direccionCliente!.push(direccionCliente);
+    }else{
+      const empresa = await Empresa.findOne({nombreEmpresa: 'empresa x'});
 
       cliente = Cliente.build({ 
         nombres,
         apellidos,
         telefono,
-        empresaId: empresa!.id,
+        empresaId: empresa!._id,
         correoElectronico,
         tipoDocumento,
         numeroDocumento,
-        direccionCliente:[direccionCliente],
         usuarioIdAlta: req.usuarioActual!.id,
-        emailUsuarioAlta: req.usuarioActual!.email ,
+        emailUsuarioAlta: req.usuarioActual!.email,
       });
-      await cliente.save();
 
-      }else{
-
-        cliente.direccionCliente!.push(direccionCliente);
-      }
-
+      const direccionCliente = DireccionCliente.build({
+        clienteId: cliente!._id,
+        direccion,
+        usuarioIdAlta: req.usuarioActual!.id,
+        emailUsuarioAlta: req.usuarioActual!.email,
+      })
+      await direccionCliente.save();
+      
+      cliente.direccionCliente!.push(direccionCliente);
+    }
+    await cliente.save();
 
     res.status(201).send(cliente);
 }

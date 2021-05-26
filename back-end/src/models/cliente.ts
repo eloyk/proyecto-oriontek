@@ -6,7 +6,7 @@ interface AtribCliente {
   apellidos: string;
   telefono?: string;
   empresaId: string;
-  correoElectronico?: string;
+  correoElectronico: string;
   tipoDocumento: string;
   numeroDocumento: string;
   direccionCliente?: [DocumentoDireccionCliente];  
@@ -21,7 +21,7 @@ interface DocumentoCliente extends mongoose.Document {
   apellidos: string;
   telefono?: string;
   empresaId: string;
-  correoElectronico?: string;
+  correoElectronico: string;
   tipoDocumento: string;
   numeroDocumento: string;
   direccionCliente?: [DocumentoDireccionCliente];  
@@ -56,6 +56,10 @@ const SchemaCliente = new mongoose.Schema(
     },
     correoElectronico: {
       type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true
     },
     tipoDocumento: {
       type: String,
@@ -64,6 +68,7 @@ const SchemaCliente = new mongoose.Schema(
     },
     numeroDocumento: {
       type: String,
+      required: true,
       unique: true,
       lowercase: true,
       trim: true
